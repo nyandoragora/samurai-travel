@@ -46,4 +46,32 @@ public class AdminHouseControllerTest {
 				.andExpect(view().name("admin/houses/index"));
 	}
 	
+	@Test
+	public void 未ログインの場合は管理者用の民宿詳細ページからログインページにリダイレクトする() throws Exception{
+		
+		mockMvc.perform(get("/admin/houses/1"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("http://localhost/login"));
+	}
+	
+	@Test
+	@WithUserDetails("taro.samurai@example.com")
+	public void 一般ユーザーとしてログイン済みの場合は管理者用の民宿詳細ページが表示されず403エラーが発生する() throws Exception{
+		
+		mockMvc.perform(get("/admin/houses/1"))
+				.andExpect(status().isForbidden());
+		
+	}
+	
+	@Test
+	@WithUserDetails("hanako.samurai@example.com")
+	public void 管理者ユーザーとしてログイン済みの場合は管理者用の民宿詳細ページが正しく表示される() throws Exception{
+		
+		mockMvc.perform(get("/admin/houses/1"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("admin/houses/show"));
+		
+	}
+	
+	
 }
