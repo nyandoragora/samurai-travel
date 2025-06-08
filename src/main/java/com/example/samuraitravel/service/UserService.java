@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.samuraitravel.entity.Role;
 import com.example.samuraitravel.entity.User;
 import com.example.samuraitravel.form.SignupForm;
+import com.example.samuraitravel.form.UserEditForm;
 import com.example.samuraitravel.repository.RoleRepository;
 import com.example.samuraitravel.repository.UserRepository;
 
@@ -38,6 +39,20 @@ public class UserService {
 		
 	}
 	
+	@Transactional
+	public void updateUser(UserEditForm userEditForm , User user) {
+		
+		user.setName(userEditForm.getName());
+		user.setFurigana(userEditForm.getFurigana());
+		user.setPostalCode(userEditForm.getPostalCode());
+		user.setAddress(userEditForm.getAddress());
+		user.setPhoneNumber(userEditForm.getPhoneNumber());
+		user.setEmail(userEditForm.getEmail());
+		
+		userRepository.save(user);
+	}
+	
+	
 	public boolean isEmailRegistered(String email) {
 		User user = userRepository.findByEmail(email);
 		return user != null;
@@ -52,4 +67,13 @@ public class UserService {
 		user.setEnabled(true);
 		userRepository.save(user);
 	}
+	
+	public boolean isEmailChanged(UserEditForm userEditForm , User user) {
+		return !userEditForm.getEmail().equals(user.getEmail());
+	}
+	
+	public User findUserByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+	
 }

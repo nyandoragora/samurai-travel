@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.samuraitravel.entity.House;
+import com.example.samuraitravel.form.HouseEditForm;
 import com.example.samuraitravel.form.HouseRegisterForm;
 import com.example.samuraitravel.repository.HouseRepository;
 
@@ -61,7 +62,7 @@ public class HouseService {
 		
 		if(!imageFile.isEmpty()) {
 			String imageName = imageFile.getOriginalFilename();
-			String hashedImageName = generateNewFIleName(imageName);
+			String hashedImageName = generateNewFileName(imageName);
 			Path filePath = Paths.get("src/main/resources/static/storage" + hashedImageName);
 			copyImageFile(imageFile, filePath);
 			house.setImageName(hashedImageName);
@@ -79,9 +80,42 @@ public class HouseService {
 		
 	}
 	
+	
+	@Transactional
+	public void updateHouse(HouseEditForm houseEditForm , House house) {
+		MultipartFile imageFile = houseEditForm.getImageFile();
+		
+		if(!imageFile.isEmpty()) {
+			String imageName = imageFile.getOriginalFilename();
+			String hashedImageName = generateNewFileName(imageName);
+			Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
+			copyImageFile(imageFile , filePath);
+			house.setImageName(hashedImageName);
+			
+		}
+		
+        house.setName(houseEditForm.getName());
+        house.setDescription(houseEditForm.getDescription());
+        house.setPrice(houseEditForm.getPrice());
+        house.setCapacity(houseEditForm.getCapacity());
+        house.setPostalCode(houseEditForm.getPostalCode());
+        house.setAddress(houseEditForm.getAddress());
+        house.setPhoneNumber(houseEditForm.getPhoneNumber());
+
+        houseRepository.save(house);
+		
+	}
+	
+	
+	@Transactional
+	public void deleteHouse(House house) {
+		houseRepository.delete(house);
+	}
+	
+	
 //	UUIDを用いて生成したファイル名を返す
 	
-	public String generateNewFIleName(String fileName) {
+	public String generateNewFileName(String fileName) {
 		String[] fileNames = fileName.split("\\.");
 		
 		for (int i = 0; i < fileNames.length-1; i++) {
