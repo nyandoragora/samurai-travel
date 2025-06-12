@@ -52,6 +52,20 @@ public class HouseService {
 		return houseRepository.findFirstByOrderByIdDesc();
 	}
 	
+//	指定されたキーワードを民宿名または住所に含む民宿を、ページングされた状態で取得
+	public Page<House> findHouseByNameLikeOrAddressLike(String nameKeyword , String addressKeyword , Pageable pageable) {
+		return houseRepository.findByNameLikeOrAddressLike("%" + nameKeyword + "%", "%" + addressKeyword + "%", pageable);
+	}
+	
+//	指定されたキーワードを住所に含む民宿を、ページングされた状態で取得
+	public Page<House> findHouseByAddressLike(String area , Pageable pageable){
+		return houseRepository.findByAddressLike(area, pageable);
+	}
+	
+//	指定された宿泊料金以下の民宿をページングされた状態で取得
+	public Page<House> findHouseByPriceLessThanEqual(Integer price , Pageable pageable){
+		return houseRepository.findByPriceLessThanEqual(price, pageable);
+	}
 	
 	
 	@Transactional
