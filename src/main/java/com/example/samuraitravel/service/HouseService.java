@@ -108,7 +108,7 @@ public class HouseService {
 		if(!imageFile.isEmpty()) {
 			String imageName = imageFile.getOriginalFilename();
 			String hashedImageName = generateNewFileName(imageName);
-			Path filePath = Paths.get("src/main/resources/static/storage" + hashedImageName);
+			Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
 			copyImageFile(imageFile, filePath);
 			house.setImageName(hashedImageName);
 		}

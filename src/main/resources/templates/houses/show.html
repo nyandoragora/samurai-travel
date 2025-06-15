@@ -5,6 +5,9 @@
 
        <div th:replace="~{fragment :: styles}"></div>
 
+	   <!-- Flatpickr -->
+	   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">  
+	   
        <title>民宿詳細</title>
    </head>
    <body>
@@ -24,6 +27,10 @@
                            </nav>
 
                            <h1 class="mb-4 text-center" th:text="${house.name}"></h1>
+						   
+						   <div th:if="${errorMessage}" class="alert alert-danger">
+						       <span th:text="${errorMessage}"></span>
+						   </div> 
 
                            <div class="mb-4">
                                <img th:if="${house.imageName}" th:src="@{/storage/__${house.imageName}__}" class="w-100" alt="民宿画像">
@@ -112,6 +119,36 @@
                                            </div>
                                        </div>
                                    </div>
+								   
+								   <!--flatpickrを用いた予約フォーム-->
+								   <div sec:authorize="isAuthenticated()" class="col-lg-4 px-0 ps-lg-4 mb-4">
+								       <div class="card">
+								           <div class="card-body">
+								               <form method="post" th:action="@{/houses/__${house.id}__/reservations/input}" th:object="${reservationInputForm}">
+								                   <div class="form-group mb-2">
+								                       <label for="fromCheckinDateToCheckoutDate" class="col-form-label text-md-left fw-bold">チェックイン・チェックアウト</label>
+								                       <div th:if="${#fields.hasErrors('checkinDate')}" class="text-danger small mb-2" th:errors="*{checkinDate}"></div>
+								                       <div th:if="${#fields.hasErrors('checkoutDate')}" class="text-danger small mb-2" th:errors="*{checkoutDate}"></div>
+								                       <!-- エラー発生時、チェックイン・チェックアウト日の入力に不備がない場合は以前の入力値を表示する -->
+								                       <input type="text" class="form-control" id="fromCheckinDateToCheckoutDate" th:value="${previousDates}" readonly>
+								                       <input type="hidden" th:field="*{checkinDate}">
+								                       <input type="hidden" th:field="*{checkoutDate}">
+								                   </div>
+
+								                   <div class="form-group mb-4">
+								                       <label for="numberOfPeople" class="col-form-label text-md-left fw-bold">宿泊人数</label>
+								                       <div th:if="${#fields.hasErrors('numberOfPeople')}" class="text-danger small mb-2" th:errors="*{numberOfPeople}"></div>
+								                       <input type="number" class="form-control" th:field="*{numberOfPeople}" min="1">
+								                   </div>
+
+								                   <div class="form-group">
+								                       <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">予約する</button>
+								                   </div>
+								               </form>
+								           </div>
+								       </div>
+								   </div>								   
+								   
                                </div>
                            </div>
                        </div>
@@ -123,5 +160,10 @@
        </div>
 
        <div th:replace="~{fragment :: scripts}"></div>
+	   
+	   <!-- Flatpickr -->
+	   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+	   <script th:src="@{/js/flatpickr.js}"></script> 
  </body>
 </html>
