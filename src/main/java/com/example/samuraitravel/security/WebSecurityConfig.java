@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -17,7 +18,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/" , "/signup/**" , "/houses" , "/houses/{id}").permitAll()  // すべてのユーザーにアクセスを許可するURL
+                .requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/" , "/signup/**" , "/houses" , "/houses/{id}" , "/stripe/webhook").permitAll()  // すべてのユーザーにアクセスを許可するURL
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()                   // 上記以外のURLはログインが必要（会員または管理者のどちらでもOK）
             )
@@ -31,7 +32,8 @@ public class WebSecurityConfig {
             .logout((logout) -> logout
                 .logoutSuccessUrl("/?loggedOut")  // ログアウト時のリダイレクト先URL
                 .permitAll()
-            );
+            )
+            .csrf(csrf -> csrf.ignoringRequestMatchers(new AntPathRequestMatcher("/stripe/webhook"))); 
 
         return http.build();
     }

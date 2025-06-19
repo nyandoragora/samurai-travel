@@ -29,6 +29,7 @@ import com.example.samuraitravel.form.ReservationInputForm;
 import com.example.samuraitravel.security.UserDetailsImpl;
 import com.example.samuraitravel.service.HouseService;
 import com.example.samuraitravel.service.ReservationService;
+import com.example.samuraitravel.service.StripeService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +39,7 @@ public class ReservationContoroller {
 
 	private final ReservationService reservationService;
 	private final HouseService houseService;
+	private final StripeService stripeService;
 	
 	@GetMapping("/reservations")
 	public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
@@ -114,7 +116,10 @@ public class ReservationContoroller {
 	}
 	
 	@GetMapping("/reservations/confirm")
-	public String confirm(RedirectAttributes redirectAttributes, HttpSession httpSession, Model model ) {
+	public String confirm(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+						  RedirectAttributes redirectAttributes, 
+						  HttpSession httpSession, 
+						  Model model ) {
 		
 //		セッションからDTOを取得
 		ReservationDTO reservationDTO = (ReservationDTO)httpSession.getAttribute("reservationDTO");
@@ -125,12 +130,18 @@ public class ReservationContoroller {
 			return "redirect:/houses";
 		}
 		
+		User user = userDetailsImpl.getUser();
+		
+		String sessionId = stripeService.createStripeSession(reservationDTO, user);
+		
 		model.addAttribute("reservationDTO" , reservationDTO);
+		model.addAttribute("sessionId", sessionId);
 		
 		return "reservations/confirm";
 		
 	}
 	
+	/*
 	@PostMapping("/reservations/create")
 	public String create(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, RedirectAttributes redirectAttributes, HttpSession httpSession) {
 		
@@ -151,5 +162,6 @@ public class ReservationContoroller {
 		
 		return "redirect:/reservations?reserved";
 	}
+	*/
 	
 }
