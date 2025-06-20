@@ -92,3 +92,29 @@ INSERT IGNORE INTO reservations (id, house_id, user_id, checkin_date, checkout_d
 INSERT IGNORE INTO reservations (id, house_id, user_id, checkin_date, checkout_date, number_of_people, amount) VALUES (9, 9, 1, '2023-04-01', '2023-04-02', 5, 9000);
 INSERT IGNORE INTO reservations (id, house_id, user_id, checkin_date, checkout_date, number_of_people, amount) VALUES (10, 10, 1, '2023-04-01', '2023-04-02', 6, 10000);
 INSERT IGNORE INTO reservations (id, house_id, user_id, checkin_date, checkout_date, number_of_people, amount) VALUES (11, 11, 1, '2023-04-01', '2023-04-02', 2, 6000);
+
+
+--faqテーブル
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (1, '会員登録しないと民宿は予約できませんか？', 'はい、予約機能は会員限定です。会員登録後にログインすることで、予約フォームを利用できます。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (2, '会員登録のメール認証が届きません。どうすればいいですか？', '迷惑メールフォルダをご確認ください。届いていない場合は、再送機能を利用するか、お問い合わせフォームからご連絡ください。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (3, '民宿の検索はどこからできますか？', 'トップページまたは民宿一覧ページで、キーワード・エリア・予算などの条件から検索可能です。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (4, '民宿の料金は1泊あたりですか？税込ですか？', '表示料金はすべて1泊あたり・税込の金額です。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (5, '人気の民宿はどこから確認できますか？', 'トップページで予約数の多い民宿を「人気の民宿」として表示しています。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (6, '民宿の詳細を確認するにはどうすればいいですか？', '民宿一覧ページや検索結果から民宿名をクリックすると、詳細ページへ遷移します。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (7, '民宿を予約したいのですが、どうすればいいですか？', '民宿詳細ページにある予約フォームから、チェックイン日などを入力して進めてください。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (8, 'ログインせずに予約はできますか？', 'いいえ。予約機能はログイン済みの会員または管理者のみ利用可能です。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (9, '予約の確認やキャンセルはどこでできますか？', 'ログイン後、予約一覧ページから予約内容を確認できます（キャンセル機能は別途実装予定です）。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (10, 'Stripe決済のセキュリティは大丈夫ですか？', 'はい、Stripeは国際的に信頼されている決済サービスです。カード情報は当アプリ側で保持されません。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (11, '決済情報はどこで確認できますか？', '決済ページで決済金額・メールアドレス・カード番号（下4桁）が表示されます。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (12, '決済が完了したかどうか確認したいです。', '決済完了後、予約一覧ページで該当の予約を確認できます。メールでも決済確認が届きます。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (13, '民宿の所在地はどこで確認できますか？', '民宿詳細ページに郵便番号・住所・電話番号が記載されています。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (14, '会員情報を変更したい場合はどうすればいいですか？', 'ログイン後、会員詳細ページから「編集」をクリックし、会員情報を更新してください。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (15, '会員情報の編集後、どこに遷移しますか？', '編集が完了すると、会員詳細ページへ戻ります。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (16, '検索結果が多すぎて探しづらいです。どうすればいいですか？', '並び替え機能（新着順・料金が安い順）や、キーワード・予算・エリアを組み合わせて絞り込み検索が可能です。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (17, '民宿は都道府県ごとに探せますか？', 'はい、47都道府県からエリアを選択して検索できます。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (18, '民宿一覧が一度に表示されすぎて困ります。', '1ページにつき10件ずつ表示され、ページネーションで次ページへ移動できます。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (19, '会員登録に必要な情報を教えてください。', '氏名、フリガナ、郵便番号、住所、電話番号、メールアドレス、パスワードが必要です。');
+INSERT IGNORE INTO faqs (id, question, answer) VALUES (20, 'ログインに失敗してしまいます。', '登録済みのメールアドレスとパスワードを正しく入力しているかご確認ください。パスワード再設定機能は現在開発中です。');
+
+
+

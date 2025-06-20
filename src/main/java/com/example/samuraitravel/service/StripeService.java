@@ -147,6 +147,13 @@ public class StripeService {
     public void processSessionCompleted(Event event) {
         // EventオブジェクトからStripeObjectオブジェクトを取得する
         Optional<StripeObject> optionalStripeObject = event.getDataObjectDeserializer().getObject();
+        
+        /*
+     // デバッグ用出力
+        System.out.println("StripeObjectの中身:" + optionalStripeObject.toString());
+        System.out.println("StripeObjectの中身:" + optionalStripeObject);
+        
+        */
 
         optionalStripeObject.ifPresentOrElse(stripeObject -> {
             // StripeObjectオブジェクトをSessionオブジェクトに型変換する
