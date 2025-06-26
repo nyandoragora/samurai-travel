@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+      <div th:replace="~{fragment :: meta}"></div>
+
+      <div th:replace="~{fragment :: styles}"></div>
+
+      <title>レビュー一覧</title>
+  </head>
+  <body>
+      <div class="samuraitravel-wrapper">
+          <div th:replace="~{fragment :: header}"></div>
+
+          <main>
+              <div class="container samuraitravel-container pb-5">
+				
+				<!--以下パンくずリスト-->
+                <div class="row justify-content-center">
+					<div class="col-xl-5 col-lg-6 col-md-8">
+						<nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                	        <ol class="breadcrumb mb-0 justify-content-center">
+                    	        <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                        	    <li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>
+								<li class="breadcrumb-item"><a th:href="@{/houses/__${house.id}__}">民宿詳細</a></li>
+								<li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
+             	            </ol>
+                        </nav>
+					</div>
+                    
+					　<!--以下リダイレクト時のエラーメッセージ-->
+
+						
+						<div th:if="${errorMessage}" class="alert alert-danger">
+						    <span th:text="${errorMessage}"></span>
+						</div> 
+
+						<!--以下本文-->
+						<div class="row justify-content-center text-center col-md-8">
+						    <h2 class="mb-3 text-center" th:text="${house.name} + のレビュー評価"></h2>
+							<form method="post" th:action="@{/reviews/create/__${house.id}__}" th:object="${reviewRegisterForm}">
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4 mb-4">
+                                       <label for="score" class="col-form-label text-md-left fw-bold">評価</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('score')}" class="text-danger small mb-2" th:errors="*{score}"></div>
+									   
+									   <!--評価選択のプルダウン-->
+									   <select class="form-select" th:field="*{score}">
+											<option value="0">選択してください。</option>
+											<option class="samuraitravel-star" value="1">&#9733;&#9734;&#9734;&#9734;&#9734;</option>
+											<option class="samuraitravel-star" value="2">&#9733;&#9733;&#9734;&#9734;&#9734;</option>
+											<option class="samuraitravel-star" value="3">&#9733;&#9733;&#9733;&#9734;&#9734;</option>
+											<option class="samuraitravel-star" value="4">&#9733;&#9733;&#9733;&#9733;&#9734;</option>
+											<option class="samuraitravel-star" value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+						               </select>
+                                   </div>
+								   	
+								   <!--コメント入力欄-->							   
+								   <div class="col-md-4 mb-4">
+                                       <label for="content" class="col-form-label text-md-left fw-bold">コメント</label>
+                                   </div>
+                                   <div class="col-md-8 mb-4">
+                                       <div th:if="${#fields.hasErrors('content')}" class="text-danger small mb-2" th:errors="*{content}"></div>
+                                       <textarea class="form-control" th:field="*{content}" rows="5" placeholder="コメントを入力してください。" autofocus ></textarea>
+                                   </div>
+								   
+								   <div class="row mb-4 justify-content-center">
+								     <div class="col-md-4 text-center">
+								       <button type="submit" class="btn text-white shadow-sm w-100 samuraitravel-btn">投稿</button>
+								     </div>
+								   </div>
+								   
+                               </div>
+                           </form>
+						   
+						</div>
+
+
+
+                  </div>
+              </div>
+          </main>
+
+		  <!--以下スクリプトとかフッターのフラグメント-->
+          <div th:replace="~{fragment :: footer}"></div>
+      </div>
+
+      <div th:replace="~{fragment :: scripts}"></div>
+</body>
+</html>

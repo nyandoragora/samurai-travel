@@ -31,6 +31,12 @@
 						   <div th:if="${errorMessage}" class="alert alert-danger">
 						       <span th:text="${errorMessage}"></span>
 						   </div> 
+						   
+						   <div th:if="${successMessage}" class="container samuraitravel-container pt-2">
+		                       <div class="alert alert-info mt-4 mb-0">
+		                           <span th:text="${successMessage}"></span>
+		                       </div>
+		                   </div>
 
                            <div class="mb-4">
                                <img th:if="${house.imageName}" th:src="@{/storage/__${house.imageName}__}" class="w-100" alt="民宿画像">
@@ -147,7 +153,72 @@
 								               </form>
 								           </div>
 								       </div>
-								   </div>								   
+								   </div>
+								   
+						   
+								   
+								   <!--レビュー投稿ボタン-->
+	   							   <div class="row mb-4 justify-content-center">
+		  							   	
+		   								<h2 class="text-center mb-5">レビュー</h2>
+								   								
+		   								<!--レビュー0の場合メッセージ-->
+		   								<div class="text-center mb-5" th:if="${#lists.isEmpty(top6Reviews)}">
+	   								        まだレビューがありません。
+		   								</div>									
+					   								
+		   							   	<div class="col-md-4 text-center" sec:authorize="isAuthenticated()" th:if="${!hasReviewed}">
+		   							       <a th:href="@{/reviews/register/__${house.id}__}" class="btn text-white shadow-sm w-100 samuraitravel-btn">レビューを投稿する</a>
+		   							   	</div>
+					   								
+	   							   </div>	
+								   
+								   <!--投稿済みのレビューを表示-->
+								   <div class="row row-cols-sm-2 row-cols-1 g-3 mb-4">
+		   						        <div class="col" th:each="top6Reviews : ${top6Reviews}">
+	   						                <div class="card h-100">
+	   						                    <div class="card-body">
+	   						                        <h3 class="card-title" th:text="${top6Reviews.user.name}"></h3>
+	   						                        <p class="card-text mb-1" th:with="score=${top6Reviews.score}">
+													    <small class="text-warning">
+													        <!-- ★（塗りつぶし）をスコア分表示 -->
+													        <span th:each="i : ${#numbers.sequence(1, score)}">&#9733;</span>
+
+													        <!-- ☆（空星）を表示、ただしスコアが5未満のときだけ -->
+													        <span th:if="${score < 5}" th:each="i : ${#numbers.sequence(1, 5 - score)}">&#9734;</span>
+													    </small>
+													</p>
+																																							
+	   												<p class="card-text mb-1">
+	   												    <small class="text-muted"
+		   												           th:text="${#dates.format(top6Reviews.updatedAt, 'yyyy年MM月dd日')}">
+	   												    </small>
+	   												</p>
+	   						                        <p class="card-text">
+	   						                            <span th:text="${top6Reviews.content}"></span>
+	   						                        </p>
+													
+													<!-- 投稿者本人にのみ表示する更新・削除ボタン -->
+													<div th:if="${user != null and top6Reviews.user.id == user.id}">
+													    <a class="btn btn-sm btn-outline-primary me-2"
+													       th:href="@{/reviews/edit/__${top6Reviews.id}__}">レビューを更新</a>
+
+													    <form th:action="@{/reviews/__${top6Reviews.id}__/delete}" method="post" style="display: inline;">
+													        <input type="hidden" name="_method" value="delete" /> <!-- DELETEメソッドを意識（Springが処理） -->
+													        <button type="submit" class="btn btn-sm btn-outline-danger"
+													                onclick="return confirm('本当に削除しますか？');">レビューを削除</button>
+													    </form>
+													</div>
+													
+	   						                    </div>
+	   						                </div>
+		   						        </div>
+		   						    </div>
+								  
+								   <!--すべての-レビューを表示-->
+								   <div class="text-center mb-4" th:if="${reviewCount > 6}">
+								       <a th:href="@{/reviews/__${house.id}__}">すべてのレビューを見る</a>
+								   </div> 								   								   
 								   
                                </div>
                            </div>
