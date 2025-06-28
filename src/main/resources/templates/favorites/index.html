@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <div th:replace="~{fragment :: meta}"></div>
+
+        <div th:replace="~{fragment :: styles}"></div>
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&display=swap" rel="stylesheet">
+
+        <!-- Swiper -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+
+        <title>お気に入り一覧ページ</title>
+    </head>
+    <body>
+        <div class="samuraitravel-wrapper">
+           <div th:replace="~{fragment :: header}"></div>
+
+		   <!--以下編集ポイント-->
+            <main>
+ 
+				<!--以下RedirectAttributesからメッセージを受け取るボックス-->
+                <div th:if="${successMessage}" class="container samuraitravel-container pt-2">
+                    <div class="alert alert-info mt-4 mb-0">
+                        <span th:text="${successMessage}"></span>
+                    </div>
+                </div>
+				
+				<!--以下本体-->
+				
+				<!--パンくずリスト-->
+				<div class="container samuraitravel-container pb-5">
+				    <div class="row justify-content-center">
+				        <nav class="my-3" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+				            <ol class="breadcrumb mb-0">
+				                <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+							    <li class="breadcrumb-item active" aria-current="page">お気に入り一覧</li>
+				            </ol>
+				        </nav>
+				    </div>
+				</div>
+				
+				<!--繰り返し処理によるお気に入り登録した民宿情報表示-->
+				<div class="container samuraitravel-container pb-5">
+				    <h2 class="mb-3">お気に入り一覧</h2>
+
+					<div th:each="favorite : ${favoritePages}">
+					    <a th:href="@{'/houses/' + ${favorite.house.id}}" class="d-block text-decoration-none text-dark mb-4">
+					        <div class="row g-4">
+					            <div class="col-4">
+					                <img th:src="@{'/storage/' + ${favorite.house.imageName}}" class="card-img-top" alt="画像">
+					            </div>
+					            <div class="col-8 border p-3 rounded">
+					                <h3 class="border-bottom pb-1" th:text="${favorite.house.name}"></h3>
+					                <p th:text="${favorite.house.description}"></p>
+					                <p th:text="${favorite.house.address}"></p>
+					                <p th:text="${#numbers.formatInteger(favorite.house.price, 1, 'COMMA') + '円 / 泊'}"></p>
+					            </div>
+					        </div>
+					    </a>
+					</div>
+					
+
+
+
+				    <!-- ページネーション -->
+				    <div th:if="${favoritePages != null and favoritePages.getTotalPages() > 1}" class="d-flex justify-content-center">
+				        <nav aria-label="レビュー一覧ページ">
+				            <ul class="pagination">
+				                <li class="page-item">
+				                    <span th:if="${favoritePages.isFirst()}" class="page-link disabled">前</span>
+				                    <a th:unless="${favoritePages.isFirst()}" th:href="@{/favorites(page = ${favoritePages.getNumber() - 1})}" class="page-link samuraitravel-page-link">前</a>
+				                </li>
+				                <li th:each="i : ${#numbers.sequence(0, favoritePages.getTotalPages() - 1)}" class="page-item">
+				                    <span th:if="${i == favoritePages.getNumber()}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
+				                    <a th:unless="${i == favoritePages.getNumber()}" th:href="@{/favorites(page = ${i})}" class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
+				                </li>
+				                <li class="page-item">
+				                    <span th:if="${favoritePages.isLast()}" class="page-link disabled">次</span>
+				                    <a th:unless="${favoritePages.isLast()}" th:href="@{/favorites(page = ${favoritePages.getNumber() + 1})}" class="page-link samuraitravel-page-link">次</a>
+				                </li>
+				            </ul>
+				        </nav>
+				    </div>
+				</div>
+				
+
+                
+            </main>
+			
+
+			<!--以下は基本編集不要-->
+            <div th:replace="~{fragment :: footer}"></div>
+        </div>
+
+        <div th:replace="~{fragment :: scripts}"></div>
+
+        <!-- Swiper -->
+        <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+        <script th:src="@{/js/carousel.js}"></script>
+    </body>
+</html>

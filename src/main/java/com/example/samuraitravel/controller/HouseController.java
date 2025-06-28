@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.samuraitravel.entity.Favorite;
 import com.example.samuraitravel.entity.House;
 import com.example.samuraitravel.entity.Review;
 import com.example.samuraitravel.entity.User;
 import com.example.samuraitravel.form.ReservationInputForm;
 import com.example.samuraitravel.security.UserDetailsImpl;
+import com.example.samuraitravel.service.FavoriteService;
 import com.example.samuraitravel.service.HouseService;
 import com.example.samuraitravel.service.ReviewService;
 
@@ -33,6 +35,7 @@ public class HouseController {
 
 	private final HouseService houseService;
 	private final ReviewService reviewService;
+	private final FavoriteService favoriteService;
 	
 	@GetMapping
 	public String index(@RequestParam(name = "keyword" , required = false) String keyword ,
@@ -87,6 +90,8 @@ public class HouseController {
 					   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 					   RedirectAttributes redirectAttributes, Model model) {
 
+//		以下必要なリソース確保
+		
 		Optional<House> optionalHouse = houseService.findHouseById(id);
 		
 		if(optionalHouse.isEmpty()) {
@@ -108,7 +113,15 @@ public class HouseController {
 		Long reviewCount = reviewService.countReviewsByHouse(house);
 		
 		
+//		以下お気に入り部分作成
 		
+		Optional<Favorite> optionalFavorite = favoriteService.findFavoriteByHouseAndUser(house, user);
+		boolean isFavoriteFlag = favoriteService.isFavorite(house, user);
+		Favorite favorite = null;
+		if(optionalFavorite.isPresent()) {
+			favorite = optionalFavorite.get();
+		}
+				
 		
 		model.addAttribute("house" , house);
 		model.addAttribute("user", user);
@@ -116,6 +129,9 @@ public class HouseController {
 		model.addAttribute("top6Reviews" , top6Reviews);
 		model.addAttribute("reviewCount" , reviewCount);
 		model.addAttribute("reservationInputForm" , new ReservationInputForm());
+		model.addAttribute("favorite" , favorite);
+		model.addAttribute("isFavoriteFlag" , isFavoriteFlag);
+		
 		
 		return "houses/show";
 	}
