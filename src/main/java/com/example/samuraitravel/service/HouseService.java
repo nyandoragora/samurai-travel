@@ -95,7 +95,7 @@ public class HouseService {
     }
     
 //    作成日時があたら良い順に8件の民宿を取得する
-    public List<House> findToop8HousesByOrderByCreatedAtDesc(){
+    public List<House> findTop8HousesByOrderByCreatedAtDesc(){
     	return houseRepository.findTop8ByOrderByCreatedAtDesc();
     }
 	

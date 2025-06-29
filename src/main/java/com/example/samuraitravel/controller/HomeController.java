@@ -19,7 +19,7 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String index(Model model) {
-		List<House> newHouses = houseService.findToop8HousesByOrderByCreatedAtDesc();
+		List<House> newHouses = houseService.findTop8HousesByOrderByCreatedAtDesc();
 		List<House> popularHouses = houseService.findTop3HousesByOrderByReservationCountDesc();
 		model.addAttribute("newHouses" , newHouses);
 		model.addAttribute("popularHouses", popularHouses);
